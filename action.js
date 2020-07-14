@@ -25,7 +25,8 @@ const action = async () => {
     );
 
     core.info('-*--*--*--*--*--*--*--*--*--*-');
-    core.info(`Job: ${github.job}`);
+    core.info(`Workflow: ${github.workflow}, event: ${github.event}, run ID: ${github.run_id}`);
+    core.info(JSON.stringify(github.context, null, 2));
     core.info('-*--*--*--*--*--*--*--*--*--*-');
     
     const createCheckRequest = {
