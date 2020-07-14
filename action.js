@@ -24,6 +24,10 @@ const action = async () => {
         `Posting status '${status}' with conclusion '${conclusion}' to ${link} (sha: ${head_sha})`
     );
 
+    core.info('-*--*--*--*--*--*--*--*--*--*-');
+    core.info(`Job: ${github.job}`);
+    core.info('-*--*--*--*--*--*--*--*--*--*-');
+    
     const createCheckRequest = {
         ...github.context.repo,
         name,
