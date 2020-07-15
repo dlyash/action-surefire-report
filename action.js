@@ -24,9 +24,11 @@ const action = async () => {
         `Posting status '${status}' with conclusion '${conclusion}' to ${link} (sha: ${head_sha})`
     );
 
+    const octokit = new github.GitHub(githubToken);
+
     core.info('-*--*--*--*--*--*--*--*--*--*-');
-    core.info(`Workflow: ${github.workflow}, event: ${github.event}, run ID: ${github.run_id}`);
-    core.info(JSON.stringify(github.context, null, 2));
+    const res = await octokit.checks.listForRef({...github.context.repo, ref: github.context.sha});
+    core.info(JSON.stringify(res, null, 2));
     core.info('-*--*--*--*--*--*--*--*--*--*-');
     
     const createCheckRequest = {
@@ -44,7 +46,6 @@ const action = async () => {
 
     core.debug(JSON.stringify(createCheckRequest, null, 2));
 
-    const octokit = new github.GitHub(githubToken);
     await octokit.checks.create(createCheckRequest);
 };
 
