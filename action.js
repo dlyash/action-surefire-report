@@ -27,8 +27,9 @@ const action = async () => {
     const octokit = new github.GitHub(githubToken);
 
     core.info('-*--*--*--*--*--*--*--*--*--*-');
-    const res = await octokit.checks.listForRef({...github.context.repo, ref: github.context.sha});
-    core.info(JSON.stringify(res, null, 2));
+    const checksResponse = await octokit.checks.listForRef({...github.context.repo, ref: github.context.sha});
+    const existingCheck = checksResponse.data.check_runs.filter(check => check.name === name)[0];
+    core.info(JSON.stringify(existingCheck, null, 2));
     core.info('-*--*--*--*--*--*--*--*--*--*-');
     
     const createCheckRequest = {
