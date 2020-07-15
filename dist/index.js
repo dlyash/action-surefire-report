@@ -12817,7 +12817,7 @@ const action = async () => {
             check_run_id: existingCheck.id,
             output: {
                 title,
-                summary: '',
+                summary: 'Blah',
                 annotations: annotations.slice(0, 50)
             }
         }
