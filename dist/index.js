@@ -12811,10 +12811,6 @@ const action = async () => {
     const checksResponse = await octokit.checks.listForRef({...github.context.repo, ref: github.context.sha});
     const existingCheck = checksResponse.data.check_runs.filter(check => check.name === name)[0];
 
-    core.info('-*--*--*--*--*--*--*--*--*--*-');
-    core.info(JSON.stringify(existingCheck, null, 2));
-    core.info('-*--*--*--*--*--*--*--*--*--*-');
-
     if (existingCheck) {
         const updateCheckRequest = {
             ...github.context.repo,
