@@ -12808,28 +12808,40 @@ const action = async () => {
 
     const octokit = new github.GitHub(githubToken);
 
-    core.info('-*--*--*--*--*--*--*--*--*--*-');
     const checksResponse = await octokit.checks.listForRef({...github.context.repo, ref: github.context.sha});
     const existingCheck = checksResponse.data.check_runs.filter(check => check.name === name)[0];
+
+    core.info('-*--*--*--*--*--*--*--*--*--*-');
     core.info(JSON.stringify(existingCheck, null, 2));
     core.info('-*--*--*--*--*--*--*--*--*--*-');
-    
-    const createCheckRequest = {
-        ...github.context.repo,
-        name,
-        head_sha,
-        status,
-        conclusion,
-        output: {
-            title,
-            summary: '',
-            annotations: annotations.slice(0, 50)
+
+    if (existingCheck) {
+        const updateCheckRequest = {
+            ...github.context.repo,
+            check_run_id: existingCheck.id,
+            output: {
+                title,
+                summary: '',
+                annotations: annotations.slice(0, 50)
+            }
         }
-    };
+        await octokit.checks.update(updateCheckRequest);
+    } else {
+        const createCheckRequest = {
+            ...github.context.repo,
+            name,
+            head_sha,
+            status,
+            conclusion,
+            output: {
+                title,
+                summary: '',
+                annotations: annotations.slice(0, 50)
+            }
+        };
 
-    core.debug(JSON.stringify(createCheckRequest, null, 2));
-
-    await octokit.checks.create(createCheckRequest);
+        await octokit.checks.create(createCheckRequest);
+    }
 };
 
 module.exports = action;
